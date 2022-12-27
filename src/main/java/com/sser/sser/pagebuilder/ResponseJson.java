@@ -11,14 +11,14 @@ public class ResponseJson {
     }
 
    public  String toString(){
-         String response = "";
+         StringBuilder response = new StringBuilder();
          for(HtmlFragment frag:elements){
              String type = frag.getType();
              String nodeOpen = "<"+type+">";
              String nodeClose = "<"+type+"/>";
 
-             response += nodeOpen+frag.getVal()+nodeClose;
+             response.append(nodeOpen).append(frag.getVal()).append(nodeClose);
          }
-         return response;
+         return response.toString();
    }
 }
