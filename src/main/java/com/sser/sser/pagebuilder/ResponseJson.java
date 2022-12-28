@@ -14,7 +14,7 @@ public class ResponseJson {
          StringBuilder response = new StringBuilder();
          for(HtmlFragment frag:elements){
              String type = frag.getType();
-             String nodeOpen = "<"+type+" style=\""+frag.getAttrs()+"\">";
+             String nodeOpen = "<"+type+" style=\""+frag.getStyle()+"\">";
              String nodeClose = "<"+type+"/>";
 
              response.append(nodeOpen).append(frag.getVal()).append(nodeClose);

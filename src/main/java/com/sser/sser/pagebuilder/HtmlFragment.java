@@ -3,7 +3,7 @@ package com.sser.sser.pagebuilder;
 public class HtmlFragment {
    private String type;
    private String val;
-   private String attrs;
+   private String style;
    public String getVal() {
       return val;
    }
@@ -21,12 +21,12 @@ public class HtmlFragment {
       this.type = type;
    }
 
-   public String getAttrs() {
-      return attrs;
+   public String getStyle() {
+      return style;
    }
 
-   public void setAttrs(String attrs) {
-      this.attrs = attrs;
+   public void setStyle(String style) {
+      this.style = style;
    }
 
 
