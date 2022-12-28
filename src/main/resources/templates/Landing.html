@@ -1,14 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>SSER-DESIGN</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .leftPane,.platform{
+        background-color: #a2a2a240;
+        box-shadow: 0px 5px 7px;
+        }
+    </style>
 
 </head>
-<body>
-   design goes here!!!!
+<body class="h-100">
+<div id="app" class="h-100">
+    <div class="container-fluid h-100">
+        <div class="row h-75 mb-2 holder" >
+            <div class="column col-3 leftPane">
+                  left panel
+            </div>
+            <div class="column col-9 platform">
+                   platform
+            </div>
+        </div>
+        <div class="row">
+         <div class="column text-center">
+             <button @click="generatePage">{{SUBMIT_MESSAGE}}</button>
+         </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+    Vue.createApp({
+      data(){
+       return{
+         SUBMIT_MESSAGE:"GENERATE THE PAGE"
+       }
+      },
+      methods:{
+          generatePage:function(){
+            var http = new XMLHttpRequest();
+            var url = '/getPage';
+
+            http.open('POST', url, true);
+
+            //Send the proper header information along with the request
+            http.setRequestHeader('Content-type', 'application/json');
+            http.onreadystatechange = function() {
+                if(http.readyState == 4 && http.status == 200) {
+                    var win = window.open("/Result");
+                     setTimeout(function(){
+                      win.document.write(http.responseText);
+                     },1000)
+
+                }
+            }
+            http.send(JSON.stringify({
+    "elements": [
+       {"type":"p","val":"sample","style":"color:red"},
+        {"type":"div","style":"color:red","val":"ng'>"}
+    ]
+}));
+          }
+      }
+    }).mount("#app");
+</script>
 </body>
 </html>

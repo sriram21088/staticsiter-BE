@@ -14,7 +14,10 @@ public class PageBuilderController {
  public String getLandingPage(){
  return "Landing";
 }
-
+@RequestMapping(value="/Result")
+public String Result(){
+ return "Result";
+}
  @RequestMapping(value="/getPage", method = RequestMethod.POST)
  public ModelAndView getPage(@RequestBody String response) {
   ModelAndView mv = new ModelAndView("ResponsivePage");
