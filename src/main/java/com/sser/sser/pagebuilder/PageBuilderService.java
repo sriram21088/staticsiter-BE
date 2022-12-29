@@ -1,7 +1,9 @@
 package com.sser.sser.pagebuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -10,15 +12,15 @@ import java.util.Arrays;
 public class PageBuilderService {
 
 
-    public  String GetPage(String pagejson)  {
-        ObjectMapper  objMap = new ObjectMapper();
+    public ArrayNode GetPage(String pagejson) {
+        ObjectMapper objMap = new ObjectMapper();
+        JsonNode nodeList = null;
         try {
-            ResponseJson nodeList = objMap.readValue(pagejson, ResponseJson.class);
-            pagejson = nodeList.toString();
+            nodeList = objMap.readTree(pagejson);
         } catch (JsonProcessingException e) {
-            pagejson =  "Error!!!";
+            System.out.println(e);
         }
-        return pagejson;
+        return (ArrayNode) nodeList.get("elements");
 
     }
 }
