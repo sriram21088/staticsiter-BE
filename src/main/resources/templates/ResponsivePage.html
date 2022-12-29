@@ -10,9 +10,17 @@
 </head>
 <body >
 <div class="container">
-    <div  th:each="node: ${nodes}">
-        <p th:text="${node.get('val')}"></p>
-    </div>
+    <div class="row" th:each="node, itr: ${nodes}">
+        <div class="column" th:each="n:${node}">
+            <div >
+                <p th:text="${n?.getType()}"></p>
+            </div>
+
+        </div>
+
+
+        </div>
+
 </div>
 </body>
 </html>
