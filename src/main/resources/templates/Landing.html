@@ -133,10 +133,11 @@
                     }
                     http.send(JSON.stringify({
                         "elements": [
+                             { "type": "h1",  "val": "MY NAME IS..", "style": "color:red" },
                             { "type": "p", "val": "midsdsd", "style": "color:red" },
-                            { "type": "h", "val": "sample", "style": "color:red" },
+                            { "type": "h", "val": "sample", "style": "color:orange" },
                             { "type": "div", "style": "color:red", "val": "ng'>" },
-                            { "type": "a", "style": "color:red", "val": "22" }
+                            { "type": "a", "attr":[{"name":"href","val":"www.google.com"}], "style": "color:blue", "val": "22" }
                         ]
                     }));
                 }
