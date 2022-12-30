@@ -1,11 +1,18 @@
 package com.sser.sser.pagebuilder;
 
+import org.jsoup.nodes.Element;
+
 import java.util.ArrayList;
 
 public class HtmlFragment {
     private String type;
     private String val;
     private String style;
+
+    public HtmlFragmentAttribute[] getAttr() {
+        return attr;
+    }
+
     private HtmlFragmentAttribute[] attr;
 
     public String getVal() {
@@ -36,11 +43,17 @@ public class HtmlFragment {
         this.style = style;
     }
 
-    public String getHTMLString() {
-        String nodeOpen = "<" + type + " style=" + style + ">";
-        String nodeClose = "</" + type + ">";
-        return nodeOpen + val + nodeClose;
+    public String getHTMLString(){
+        Element element = new Element(type);
+        element.text(val);
+        element.attr("style",style);
+        if(attr != null){
+            for(HtmlFragmentAttribute attr : attr){
+                element.attr(attr.getName(), attr.getVal());
+            }
+        }
 
+        return element.toString();
     }
 
 

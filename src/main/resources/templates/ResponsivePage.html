@@ -19,7 +19,7 @@
 <div class="container holder">
     <div class="row" th:each="node, itr: ${nodes}">
         <div class="column col-md-4" th:each="n:${node}">
-            <th:block th:utext="${n?.getHTMLString()}" >
+            <th:block  th:utext="${n?.getHTMLString()}" >
             </th:block>
         </div>
 
