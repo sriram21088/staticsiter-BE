@@ -23,6 +23,7 @@
         .platform {
             background-color: #a2a2a240;
             box-shadow: 0px 5px 7px;
+            position: relative;
         }
     </style>
 
@@ -30,9 +31,9 @@
 
 <body class="h-100">
     <div id="app" class="h-100">
-        <div class="container-fluid h-100">
+        <div class="container-fluid">
             <div class="row mb-2 holder">
-                <div class="column col-2 leftPane">
+                <div class="column col-md-2 leftPane">
                     <select v-model="activeType" @change="changeCompType($event.target.value)">
                         <option value="null">Select an Element</option>
                         <option v-for="option in availableElements" :value="option.value">
@@ -44,8 +45,19 @@
                             v-if="activeType=='p'||activeType=='h1'||activeType=='h2'||activeType=='h3'"></textarea>
                             
                     </div>
+                    <div class="notes" style="font-size: 12px;">
+                       <ul>
+                         <li> check any the check box , so that the particular cell will become active.</li>
+                         <li> You can change the elemnt type in element dropdown. select a suitable type</li>
+                         <li>You can provide details to that element on the underlying fileds</li>
+                          <li>click preview to view the site</li>
+                          <li>Site can be downloaded  by clicking \"Download \" button in the preview page.</li>
+
+                        </ul>
+                    </div>
+
                 </div>
-                <div class="column col-10 platform">
+                <div class="column col-md-10 platform">
                     <div class="container h-100">
                         <div class="row">
                             <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps" ></Cell>
