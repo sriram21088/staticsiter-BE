@@ -33,46 +33,50 @@
         <div class="container-fluid h-100">
             <div class="row mb-2 holder">
                 <div class="column col-2 leftPane">
-                    <select v-model="activeType">
+                    <select v-model="activeType" @change="changeCompType($event.target.value)">
                         <option value="null">Select an Element</option>
                         <option v-for="option in availableElements" :value="option.value">
                             {{ option.text }}
                         </option>
                     </select>
+                    <div id="nodeVal">
+                        <textarea @input="addTextToComps($event.target.value)" placeholder="enter the value"
+                            v-if="activeType=='p'||activeType=='h1'||activeType=='h2'||activeType=='h3'"></textarea>
+                            
+                    </div>
                 </div>
                 <div class="column col-10 platform">
                     <div class="container h-100">
                         <div class="row">
-                            <Cell></Cell>
-                             <Cell></Cell>
-                             <Cell></Cell>
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps" ></Cell>
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps" ></Cell>
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps" ></Cell>
                         </div>
                         <div class="row">
-                            <Cell></Cell>
-                             <Cell></Cell>
-                             <Cell></Cell>
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps"></Cell>
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps"></Cell>
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps"></Cell>
 
                         </div>
                         <div class="row">
-                            <Cell></Cell>
-                            <Cell></Cell>
-                            <Cell></Cell>
-
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps"></Cell>
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps"></Cell>
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps"></Cell>
                         </div>
                         <div class="row">
-                            <Cell></Cell>
-                             <Cell></Cell>
-                             <Cell></Cell>
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps"></Cell>
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps"></Cell>
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps"></Cell>
                         </div>
                         <div class="row">
-                            <Cell></Cell>
-                             <Cell></Cell>
-                             <Cell></Cell>
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps"></Cell>
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps"></Cell>
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps"></Cell>
                         </div>
                         <div class="row">
-                             <Cell></Cell>
-                             <Cell></Cell>
-                             <Cell></Cell>
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps"></Cell>
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps"></Cell>
+                            <Cell :totalcomponents="totalComponents" :selectedcomps="selectedComps"></Cell>
                         </div>
                     </div>
                 </div>
@@ -86,25 +90,69 @@
 
 
     </div>
-    <script type="vue-template" id="custom-button">
-        <div class="column col-md-4 text-center">
-         Cell
-        </div>
-    </script>
-
     <script>
-       const Cell = {
-        template: "#custom-button"
-       };
+        const Cell = {
+            data: function () {
+                return {
+                    value: "Content goes here!",
+                    activeType:"p"
+                }
+
+            },
+            mounted() {
+                this.totalcomponents.push(this);
+            },
+            methods: {
+                getName: function () {
+                    if (this.$refs.checkbox.checked) {
+                        if(this.selectedcomps.length>0){
+                            this.selectedcomps[0].$refs.checkbox.checked = false;
+                            this.selectedcomps.pop();
+                        }
+                        this.selectedcomps.push(this);
+                    } else {
+                        this.selectedcomps.pop();
+                    }
+                    console.log(this.selectedcomps);
+                },
+                getDynamicTag: function () {
+                    switch (this.activeType) {
+                        case "p":
+                            return `<p>${this.value}</p>`;
+                        case "h1":
+                            return `<h1>${this.value}</h1>`;
+                        case "h2":
+                            return `<h2>${this.value}</h2>`;
+                        case "h3":
+                            return `<h3>${this.value}</h3>`;
+                        default:
+                            return this.value;
+
+                    }
+
+                }
+
+            },
+            props: ["selectedcomps", "activetype","totalcomponents"],
+            template: ` <div class="column col-md-4 text-center cellComponent">` +
+                `<div v-html="getDynamicTag()"></div>` +
+                ` <div>
+            <input ref = "checkbox" @change="getName()" type='checkbox'/>
+         </div>
+         
+        </div>`
+        };
         const app = Vue.createApp({
             data() {
                 return {
                     SUBMIT_MESSAGE: "GENERATE THE PAGE",
                     activeType: null,
+                    selectedComps: [],
+                    totalComponents:[],
                     availableElements: [
-                        { text: "titleBig", value: "H1" },
-                        { text: "titleSmall", value: "H2" },
-                        { text: "titleSmaller", value: "H3" },
+                        { text: "titleBig", value: "h1" },
+                        { text: "titleSmall", value: "h2" },
+                        { text: "titleSmaller", value: "h3" },
                         { text: "link", value: "a" },
                         { text: "image", value: "img" },
                         { text: "text", value: "p" },
@@ -112,9 +160,17 @@
                     ]
                 }
             },
-            components:{Cell:Cell},
+            components: { Cell: Cell },
             methods: {
                 generatePage: function () {
+                    const payload={"elements":[]};
+                    this.totalComponents.forEach(element => {
+                        payload.elements.push({
+                            type: element.activeType,
+                            val: element.value
+                        })
+                    });
+                   
                     var http = new XMLHttpRequest();
                     var url = '/getPage';
 
@@ -131,20 +187,19 @@
 
                         }
                     }
-                    http.send(JSON.stringify({
-                        "elements": [
-                             { "type": "h1",  "val": "MY NAME IS..", "style": "color:red" },
-                            { "type": "p", "val": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id auctor urna. Ut luctus neque et dui dictum, maximus dictum ante ultricies. Aliquam nec massa sem. In hac habitasse platea dictumst. Vestibulum a leo sed sem elementum euismod in sit amet augue. Ut leo nibh, euismod vitae consectetur vitae, efficitur sit amet neque. Duis sagittis, ipsum id placerat hendrerit, orci arcu volutpat turpis, ac rutrum risus risus ut nunc. Fusce in neque ut nibh pretium consectetur ac sit amet ex. Integer aliquet eros et purus blandit iaculis. Aenean massa est, facilisis et nunc nec, venenatis auctor dolor. Nulla facilisi. Mauris luctus risus quis nulla tempus, at fringilla nulla tempor. Nullam eget libero sit amet tortor dignissim accumsan et at tellus.", "style": "color:red" },
-                            { "type": "h", "val": "sample", "style": "color:orange" },
-                            { "type": "div", "style": "color:red", "val": "ng'>" },
-                             { "type": "img", "attr":[{"name":"src","val":"https://images.unsplash.com/photo-1671525872560-ee97bd152fd7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"}] },
-                            { "type": "a", "attr":[{"name":"href","val":"https://www.google.com"}], "style": "color:blue", "val": "22" }
-                        ]
-                    }));
+                    http.send(JSON.stringify(payload));
+                },
+                addTextToComps: function (val) {
+                    this.selectedComps[0].value = val;
+                },
+                changeCompType:function(v){
+                    if(this.selectedComps[0]){
+                        this.selectedComps[0].activeType = v;
+                    }
                 }
             }
         }).mount("#app");
-       
+
     </script>
 </body>
 
