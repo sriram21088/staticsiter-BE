@@ -45,8 +45,13 @@ public class HtmlFragment {
 
     public String getHTMLString(){
         Element element = new Element(type);
-        element.text(val);
-        element.attr("style",style);
+        if(val !=null){
+            element.text(val);
+        }
+        if(style !=null){
+            element.attr("style",style);
+        }
+
         if(attr != null){
             for(HtmlFragmentAttribute attr : attr){
                 element.attr(attr.getName(), attr.getVal());
